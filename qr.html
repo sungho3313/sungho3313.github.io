@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Barcode & QR Code Generator</title>
+    <style>
+        /* 전체 배경을 검은색으로 설정 */
+        body {
+            background-color: black;
+            color: white;
+            font-family: Arial, sans-serif;
+            text-align: center; /* 모든 요소를 가운데로 정렬 */
+        }
+
+        /* 입력 필드 스타일 수정 */
+        input[type="text"], button {
+            display: block;
+            margin: 0 auto;
+            margin-top: 10px;
+            padding: 5px;
+            background-color: white; /* 배경을 흰색으로 설정 */
+            color: black; /* 텍스트 색상을 검정색으로 설정 */
+            border-radius: 5px;
+            width: 200px;
+            height: 40px;
+        }
+
+        /* 버튼 스타일 수정 */
+        button {
+            background-color: royalblue;
+            color: black;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            margin-top: 30px;
+        }
+
+        /* 바코드 및 QR 코드 컨테이너 스타일 수정 */
+        #barcode, #qrcode {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 20px;
+            height: 200px;
+        }
+
+        /* 바코드 및 QR 코드 이미지 스타일 수정 */
+        #barcodeImage, #qrcodeImage {
+            max-width: 100%;
+            height: auto;
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <h1>바코드 & QR코드 생성기</h1>
+    
+    <div id="barcode">
+        <img id="barcodeImage" src="" alt="생성된 바코드">
+    </div>
+    
+    <div id="qrcode">
+        <img id="qrcodeImage" src="" alt="생성된 QR 코드">
+    </div>
+    
+    <input type="text" id="urlInput" placeholder="URL 입력">
+    <button onclick="generateCodes()">생성</button>
+    
+    <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.0/dist/JsBarcode.all.min.js"></script>
+    <script src="https://cdn.rawgit.com/davidshimjs/qrcodejs/gh-pages/qrcode.min.js"></script>
+    <script>
+        function generateCodes() {
+            var url = document.getElementById("urlInput").value;
+            
+            // 기존 이미지 삭제
+            var barcodeImage = document.getElementById("barcodeImage");
+            while (barcodeImage.firstChild) {
+                barcodeImage.removeChild(barcodeImage.firstChild);
+            }
+            
+            var qrcodeImage = document.getElementById("qrcodeImage");
+            while (qrcodeImage.firstChild) {
+                qrcodeImage.removeChild(qrcodeImage.firstChild);
+            }
+            
+            // 새로운 이미지 생성
+            JsBarcode("#barcodeImage", url, {
+                format: "CODE128",
+                displayValue: true,
+                fontSize: 14
+            });
+            
+            // QR 코드 이미지 생성
+            var qrcode = new QRCode(document.getElementById("qrcodeImage"), {
+                text: url,
+                width: 128,
+                height: 128
+            });
+            
+            // QR 코드 이미지 alt 속성 비워주기
+            qrcode._el.alt = "";
+        }
+    </script>
+</body>
+</html>
